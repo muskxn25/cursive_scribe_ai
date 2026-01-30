@@ -1,16 +1,45 @@
-# React + Vite
+# 🖋️ Cogniscript Vision
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Cogniscript Vision** is an AI-powered digital ink engine designed to bridge the gap between physical writing and digital data. Using advanced computer vision and hand tracking, it transforms any surface into a smart writing canvas.
 
-Currently, two official plugins are available:
+## 🚀 Mission
+To provide a seamless, tool-agnostic handwriting digitization experience that captures the nuances of human writing—including velocity, pressure (proxied by pinch distance), and hesitation—without requiring specialized hardware like expensive tablets or styluses.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📊 Project Roadmap
 
-## React Compiler
+### Current Features (Achieved)
+- [x] **Real-time Hand Tracking**: Powered by MediaPipe for precise fingertip and wrist localization.
+- [x] **Smart Tool Detection**: Uses COCO-SSD to identify pens or "fancy pen" proxies (brushes, styluses, etc.) to calibrate writing offsets.
+- [x] **Remote Camera Pairing**: Seamlessly pair your smartphone as a dedicated wireless camera feed using PeerJS.
+- [x] **Kinematic Metrics**: Real-time tracking of writing velocity and hesitation detection.
+- [x] **Digital Ink Engine**: Smooth coordinate filtering and multi-color rendering based on writing speed.
+- [x] **Export Capability**: Instant PNG export of your captured handwriting sessions.
+- [x] **GitHub Automation**: Automatic daily backup to GitHub scheduled for 6:00 PM local time.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Future Goals (Planned)
+- [ ] **Handwriting-to-Text (OCR)**: Integrated local/cloud OCR to convert sketches into editable text.
+- [ ] **Advanced Calibration**: Auto-alignment for various writing surfaces (paper, whiteboard, tablet).
+- [ ] **Multi-Session History**: A dashboard to review and organize previous writing sessions.
+- [ ] **Cloud Sync**: Optional synchronization with popular note-taking apps.
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
+- **Frontend**: React + Vite
+- **Vision**: MediaPipe Hands & TensorFlow.js (COCO-SSD)
+- **Networking**: PeerJS (WebRTC) for low-latency remote camera streaming
+- **Styling**: Vanilla CSS for premium, responsive UI
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ⚙️ Quick Start
+
+### Local Development
+1. Clone the repository.
+2. Install dependencies: `npm install`
+3. Start the dev server: `npm run dev`
+
+### Pairing a Remote Camera
+1. Open the app on your PC.
+2. Scan the generated QR code with your smartphone.
+3. Tap **START FEED** on your phone to turn it into a wireless document camera.
+
+---
+
+*Cogniscript Vision — Digitizing human expression, one stroke at a time.*
