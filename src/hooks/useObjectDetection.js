@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
 import * as tf from '@tensorflow/tfjs';
+import '@tensorflow/tfjs-backend-webgl';
 import * as cocossd from '@tensorflow-models/coco-ssd';
 
 export const useObjectDetection = () => {

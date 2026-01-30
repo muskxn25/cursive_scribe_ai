@@ -211,19 +211,25 @@ function App() {
   useEffect(() => {
     if (remoteStream && sharedVideoRef.current) {
       addLog("Stream detected. Binding to display...");
-      sharedVideoRef.current.srcObject = remoteStream;
-      sharedVideoRef.current.onloadedmetadata = () => {
-        sharedVideoRef.current.play().then(() => {
+      const video = sharedVideoRef.current;
+      video.srcObject = remoteStream;
+
+      video.onloadedmetadata = () => {
+        if (!video) return;
+        video.play().then(() => {
           addLog("Playback active!");
           if (canvasRef.current && overlayCanvasRef.current) {
-            [canvasRef, overlayCanvasRef].forEach(ref => {
-              ref.current.width = window.innerWidth;
-              ref.current.height = window.innerHeight;
+            [canvasRef.current, overlayCanvasRef.current].forEach(canvas => {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
             });
             contextRef.current = canvasRef.current.getContext('2d');
             overlayContextRef.current = overlayCanvasRef.current.getContext('2d');
           }
-        }).catch(e => addLog("Blocked!"));
+        }).catch(e => {
+          addLog("Autoplay blocked! Click RE-SYNC.");
+          console.warn("Autoplay failed:", e);
+        });
       };
     }
   }, [remoteStream]);
