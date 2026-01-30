@@ -8,12 +8,21 @@ export const useRemoteCamera = (mode = 'receiver', addLog = console.log) => {
     const peerRef = useRef(null);
 
     useEffect(() => {
-        const peer = new Peer();
+        const peer = new Peer({
+            config: {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' },
+                ]
+            }
+        });
         peerRef.current = peer;
 
         peer.on('open', (id) => {
             setPeerId(id);
             setStatus('ready');
+            addLog("Peer initialized. ID: " + id.slice(0, 8));
             console.log('Peer ID:', id);
         });
 

@@ -9,11 +9,14 @@ export const useObjectDetection = () => {
     useEffect(() => {
         const loadModel = async () => {
             try {
+                console.log("[CV] Setting up WebGL backend...");
+                await tf.setBackend('webgl');
+                await tf.ready();
                 console.log("[CV] Loading COCO-SSD model...");
                 const loadedModel = await cocossd.load();
                 setModel(loadedModel);
                 setIsModelLoading(false);
-                console.log("[CV] Model loaded successfully.");
+                console.log("[CV] Model loaded successfully on backend:", tf.getBackend());
             } catch (err) {
                 console.error("[CV] Model load failed:", err);
                 setIsModelLoading(false);

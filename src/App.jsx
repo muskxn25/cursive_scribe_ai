@@ -57,6 +57,19 @@ function App() {
   const { detect, isModelLoading } = useObjectDetection();
 
   // Hand Tracking Results
+  useEffect(() => {
+    const checkBackend = async () => {
+      try {
+        await tf.setBackend('webgl');
+        const backend = tf.getBackend();
+        addLog(`NVIDIA/GPU Engine: ${backend.toUpperCase()} active`);
+      } catch (e) {
+        addLog("GPU Engine: Falling back to CPU...");
+      }
+    };
+    checkBackend();
+  }, []);
+
   const onResults = useCallback(async (results) => {
     if (appMode !== 'pc' || !contextRef.current || !canvasRef.current || !overlayContextRef.current) return;
 
@@ -271,10 +284,11 @@ function App() {
           {!remoteStream && (
             <div style={{ textAlign: 'center' }}>
               <div style={{ background: 'white', padding: '10px', borderRadius: '12px', display: 'inline-block' }}>
-                <QRCodeSVG value={`${window.location.origin}/?pair=${peerId}`} size={160} />
+                <QRCodeSVG value={`https://subbronchial-alisia-unreprobatively.ngrok-free.dev/?pair=${peerId}`} size={160} />
               </div>
               <div style={{ marginTop: '1rem', padding: '10px', background: '#f8fafc', borderRadius: '8px' }}>
-                <p style={{ fontSize: '0.6rem', color: '#64748b' }}>PAIRING CODE: <strong>{peerId || '...'}</strong></p>
+                <p style={{ fontSize: '0.6rem', color: '#64748b' }}>SECURE LINK: <br /><a href="https://subbronchial-alisia-unreprobatively.ngrok-free.dev" target="_blank" style={{ color: '#2563eb', fontWeight: 'bold' }}>ngrok-free.dev</a></p>
+                <p style={{ fontSize: '0.6rem', color: '#64748b', marginTop: '5px' }}>PAIRING CODE: <strong>{peerId || '...'}</strong></p>
               </div>
             </div>
           )}
@@ -301,6 +315,14 @@ function App() {
           <div style={{ marginTop: '1rem', display: 'flex', gap: '5px' }}>
             <button className="btn" style={{ flex: 1, fontSize: '0.6rem', padding: '5px' }} onClick={() => setShowSkeleton(!showSkeleton)}>SKELETON</button>
             <button className="btn" style={{ flex: 1, fontSize: '0.6rem', padding: '5px' }} onClick={() => setShowObjects(!showObjects)}>OBJECTS</button>
+            <button className="btn" style={{ flex: 1, fontSize: '0.6rem', padding: '5px', background: '#fef3c7' }} onClick={() => sharedVideoRef.current?.play()}>RE-SYNC</button>
+          </div>
+
+          <div style={{ marginTop: '1rem', padding: '10px', background: '#f1f5f9', borderRadius: '8px', maxHeight: '100px', overflowY: 'auto' }}>
+            <div style={{ fontSize: '0.6rem', color: '#64748b', fontWeight: 'bold', marginBottom: '5px' }}>SYSTEM LOGS</div>
+            {logs.map((log, i) => (
+              <div key={i} style={{ fontSize: '0.55rem', color: '#334155', borderBottom: '1px solid #e2e8f0', padding: '2px 0' }}>{log}</div>
+            ))}
           </div>
         </div>
       </div>
