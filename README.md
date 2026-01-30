@@ -7,20 +7,22 @@ To provide a seamless, tool-agnostic handwriting digitization experience that ca
 
 ## 📊 Project Roadmap
 
-### Current Features (Achieved)
-- [x] **Real-time Hand Tracking**: Powered by MediaPipe for precise fingertip and wrist localization.
-- [x] **Smart Tool Detection**: Uses COCO-SSD to identify pens or "fancy pen" proxies (brushes, styluses, etc.) to calibrate writing offsets.
-- [x] **Remote Camera Pairing**: Seamlessly pair your smartphone as a dedicated wireless camera feed using PeerJS.
-- [x] **Kinematic Metrics**: Real-time tracking of writing velocity and hesitation detection.
-- [x] **Digital Ink Engine**: Smooth coordinate filtering and multi-color rendering based on writing speed.
-- [x] **Export Capability**: Instant PNG export of your captured handwriting sessions.
-- [x] **GitHub Automation**: Automatic daily backup to GitHub scheduled for 6:00 PM local time.
+### 🏆 Current Features (Achieved)
+| Status | Feature | Implementation |
+| :---: | :--- | :--- |
+| ✅ | **Real-time Hand Tracking** | MediaPipe Hands (Fingertip & Wrist) |
+| ✅ | **Smart Tool Detection** | TensorFlow.js (COCO-SSD Tool Calibration) |
+| ✅ | **Remote Camera Pairing** | PeerJS (WebRTC P2P Pairing) |
+| ✅ | **Kinematic Metrics** | Flowing Velocity & Hesitation Tracking |
+| ✅ | **Digital Ink Engine** | Dynamic coordinate smoothing & rendering |
+| ✅ | **Instant Export** | Canvas-to-PNG persistence |
+| ✅ | **Cloud Backups** | Automated 6 PM GitHub synchronization |
 
-### Future Goals (Planned)
-- [ ] **Handwriting-to-Text (OCR)**: Integrated local/cloud OCR to convert sketches into editable text.
-- [ ] **Advanced Calibration**: Auto-alignment for various writing surfaces (paper, whiteboard, tablet).
-- [ ] **Multi-Session History**: A dashboard to review and organize previous writing sessions.
-- [ ] **Cloud Sync**: Optional synchronization with popular note-taking apps.
+### 🛠️ Future Goals (Planned)
+- [ ] **AI Handwriting OCR**: Real-time conversion to editable text.
+- [ ] **Surface-Aware Calibration**: Auto-alignment for any writing surface.
+- [ ] **Session Replay**: Interactive dashboard for reviewing previous sessions.
+- [ ] **Collaboration Mode**: Shared canvas for remote pair-writing.
 
 ## 🛠️ Tech Stack
 - **Frontend**: React + Vite

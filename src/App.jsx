@@ -193,7 +193,7 @@ function App() {
     }
   }, [appMode, showSkeleton, showObjects, detect, sceneStatus.detectedObjects]);
 
-  const { peerId, remoteStream, status: remoteStatus, startStreaming } = useRemoteCamera(appMode === 'phone' ? 'sender' : 'receiver');
+  const { peerId, remoteStream, status: remoteStatus, startStreaming } = useRemoteCamera(appMode === 'phone' ? 'sender' : 'receiver', addLog);
 
   useEffect(() => {
     if (remoteStream && sharedVideoRef.current) {

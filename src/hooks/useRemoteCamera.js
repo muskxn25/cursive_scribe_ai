@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Peer from 'peerjs';
 
-export const useRemoteCamera = (mode = 'receiver') => {
+export const useRemoteCamera = (mode = 'receiver', addLog = console.log) => {
     const [peerId, setPeerId] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
     const [status, setStatus] = useState('initializing');
@@ -23,9 +23,14 @@ export const useRemoteCamera = (mode = 'receiver') => {
                 setStatus('connecting');
                 call.answer();
                 call.on('stream', (stream) => {
-                    console.log('Remote stream received!');
+                    console.log('Remote stream received! Tracks:', stream.getVideoTracks().length);
+                    addLog("Stream received! Binding to display...");
                     setRemoteStream(stream);
                     setStatus('streaming');
+                });
+                call.on('error', (err) => {
+                    console.error('Call error:', err);
+                    addLog("Call error: " + err.type);
                 });
             });
         }
@@ -70,6 +75,7 @@ export const useRemoteCamera = (mode = 'receiver') => {
 
             setRemoteStream(stream);
             setStatus('streaming');
+            addLog("Calling target: " + targetId);
             return stream;
         } catch (err) {
             console.error('Streaming error:', err);
