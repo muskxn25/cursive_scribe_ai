@@ -1,0 +1,38 @@
+import { useState, useEffect, useCallback } from 'react';
+import * as tf from '@tensorflow/tfjs';
+import * as cocossd from '@tensorflow-models/coco-ssd';
+
+export const useObjectDetection = () => {
+    const [model, setModel] = useState(null);
+    const [isModelLoading, setIsModelLoading] = useState(true);
+
+    useEffect(() => {
+        const loadModel = async () => {
+            try {
+                console.log("[CV] Loading COCO-SSD model...");
+                const loadedModel = await cocossd.load();
+                setModel(loadedModel);
+                setIsModelLoading(false);
+                console.log("[CV] Model loaded successfully.");
+            } catch (err) {
+                console.error("[CV] Model load failed:", err);
+                setIsModelLoading(false);
+            }
+        };
+        loadModel();
+    }, []);
+
+    const detect = useCallback(async (videoElement) => {
+        if (!model || !videoElement || videoElement.readyState !== 4) return [];
+
+        try {
+            const predictions = await model.detect(videoElement);
+            return predictions;
+        } catch (err) {
+            console.error("[CV] Detection error:", err);
+            return [];
+        }
+    }, [model]);
+
+    return { detect, isModelLoading };
+};
