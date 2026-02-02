@@ -71,7 +71,7 @@ function App() {
   }, []);
 
   const onResults = useCallback(async (results) => {
-    if (appMode !== 'pc' || !contextRef.current || !canvasRef.current || !overlayContextRef.current) return;
+    if (appMode !== 'pc' || !contextRef.current || !canvasRef.current || !overlayContextRef.current || !sharedVideoRef.current) return;
 
     // 1. Clear Overlay
     overlayContextRef.current.clearRect(0, 0, overlayCanvasRef.current.width, overlayCanvasRef.current.height);
@@ -80,7 +80,7 @@ function App() {
     const handFound = results.multiHandLandmarks && results.multiHandLandmarks.length > 0;
 
     // 2. Throttled Object Detection & Pen Proximity
-    if (now - lastDetectionTime.current > 500) {
+    if (now - lastDetectionTime.current > 500 && sharedVideoRef.current.readyState === 4) {
       const objects = await detect(sharedVideoRef.current);
 
       let bestPenCandidate = null;
@@ -139,13 +139,15 @@ function App() {
         const bh = height * scale;
 
         const isPen = PEN_PROXIES.includes(obj.class) || obj.class === 'pen';
-        overlayContextRef.current.strokeStyle = isPen ? '#22c55e' : '#2563eb';
-        overlayContextRef.current.lineWidth = isPen ? 3 : 1;
-        overlayContextRef.current.strokeRect(bx, by, bw, bh);
+        if (overlayContextRef.current) {
+          overlayContextRef.current.strokeStyle = isPen ? '#22c55e' : '#2563eb';
+          overlayContextRef.current.lineWidth = isPen ? 3 : 1;
+          overlayContextRef.current.strokeRect(bx, by, bw, bh);
 
-        overlayContextRef.current.fillStyle = isPen ? '#22c55e' : '#2563eb';
-        overlayContextRef.current.font = 'bold 12px Inter';
-        overlayContextRef.current.fillText(`${isPen ? '🖋️ ' : ''}${obj.class}`, bx, by > 20 ? by - 5 : by + 15);
+          overlayContextRef.current.fillStyle = isPen ? '#22c55e' : '#2563eb';
+          overlayContextRef.current.font = 'bold 12px Inter';
+          overlayContextRef.current.fillText(`${isPen ? '🖋️ ' : ''}${obj.class}`, bx, by > 20 ? by - 5 : by + 15);
+        }
       });
     }
 
@@ -178,7 +180,7 @@ function App() {
         lastHesitationTime.current = now;
       }
 
-      if (isCurrentlyPinching) {
+      if (isCurrentlyPinching && contextRef.current) {
         contextRef.current.beginPath();
         contextRef.current.strokeStyle = getVelocityColor(v);
         contextRef.current.lineWidth = 4;
@@ -321,7 +323,11 @@ function App() {
           <div style={{ marginTop: '1rem', display: 'flex', gap: '5px' }}>
             <button className="btn" style={{ flex: 1, fontSize: '0.6rem', padding: '5px' }} onClick={() => setShowSkeleton(!showSkeleton)}>SKELETON</button>
             <button className="btn" style={{ flex: 1, fontSize: '0.6rem', padding: '5px' }} onClick={() => setShowObjects(!showObjects)}>OBJECTS</button>
-            <button className="btn" style={{ flex: 1, fontSize: '0.6rem', padding: '5px', background: '#fef3c7' }} onClick={() => sharedVideoRef.current?.play()}>RE-SYNC</button>
+            <button className="btn" style={{ flex: 1, fontSize: '0.6rem', padding: '5px', background: '#fef3c7' }} onClick={() => {
+              if (sharedVideoRef.current) {
+                sharedVideoRef.current.play().catch(e => addLog("Force play failed"));
+              }
+            }}>RE-SYNC</button>
           </div>
 
           <div style={{ marginTop: '1rem', padding: '10px', background: '#f1f5f9', borderRadius: '8px', maxHeight: '100px', overflowY: 'auto' }}>
